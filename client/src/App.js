@@ -10,10 +10,10 @@ function App() {
   const [room, setRoom] = useState('');
 
   // local state to store the user's message
-  const [message, setMessage] = useState('');
-
-  // local state to store messages recieved by other users
-  const [messageRecieved, setMessageRecieved] = useState('');
+  const [matchInfo, setMatchInfo] = useState({
+    playerOneHp: 40,
+    PlayerTwoHp: 40
+  });
   
 
   const joinRoom = () => {
@@ -23,13 +23,13 @@ function App() {
   };
 
   // Emit a message to the backend server
-  const sendMessage = () => {
-    socket.emit("send_message", {message, room})
+  const updateMatchInfo = () => {
+    socket.emit("update_match_info", {matchInfo, room})
   };
 
   useEffect(() => {
-    socket.on("recieve_message", (data) => {
-      setMessageRecieved(data.message);
+    socket.on("receive_match_info", (data) => {
+      setMatchInfo(data.matchInfo);
     })
   }, [socket])
 
@@ -44,14 +44,21 @@ function App() {
       />
       <button onClick={joinRoom}>Join Room</button>
       <input
-        placeholder="Message"  
+        type="number"
         onChange={(event) => {
-          setMessage(event.target.value);
+          setMatchInfo({...matchInfo, playerOneHp: event.target.value});
+          updateMatchInfo();
         }}
       />
-      <button onClick={sendMessage}>Send Message</button>
-      <h1>Message Recieved:</h1>
-      {messageRecieved}
+      <input
+        type="number"
+        onChange={(event) => {
+          setMatchInfo({...matchInfo, playerTwoHp: event.target.value});
+          updateMatchInfo();
+        }}
+      />
+      <h2>Player One Hp: {matchInfo.playerOneHp}</h2>
+      <h2>Player Two Hp: {matchInfo.playerTwoHp}</h2>
     </div>
   );
 }

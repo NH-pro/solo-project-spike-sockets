@@ -24,11 +24,11 @@ io.on("connection", (socket) => {
     });
 
     // Like sagas, the server will listening for an event name called "send_message".
-    socket.on("send_message", (data) => {
+    socket.on("update_match_info", (data) => {
         console.log(data);
         // Server will emit its own event called "recieve_message" that is sending
         //  that is sending the original data ,{message: "hello"}, that one of the clients sent to the server.
-        socket.to(data.room).emit("recieve_message", data)
+        socket.to(data.room).emit("receive_match_info", data)
     });
 })
 
