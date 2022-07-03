@@ -14,3 +14,6 @@ Setup for Socket.io
         - "npm install socket.io"
 
     - In "server" folder, create a file called "index.js"
+
+    - In "client" terminal,
+        - run command "npm install socket.io-client"
